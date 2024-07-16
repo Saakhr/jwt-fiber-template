@@ -1,0 +1,8 @@
+tmp/
+node_modules/
+/node_modules
+.env
+db/
+scdb
+static/products/
+key.pem
