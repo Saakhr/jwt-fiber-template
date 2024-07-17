@@ -30,7 +30,7 @@ func main() {
 	v1 := v1routes.GetRoutes(privateKey)
 	app.Mount("/v1", v1)
 
-	log.Fatal(app.Listen(":3000"))
+	log.Fatal(app.Listen(":8080"))
 }
 func getKey() error {
 	// Replace with your actual key file path
