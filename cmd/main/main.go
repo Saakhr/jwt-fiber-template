@@ -5,7 +5,7 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
-	"io"
+	"github.com/joho/godotenv"
 	"log"
 	"os"
 
@@ -19,10 +19,14 @@ var (
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	app := fiber.New()
 
 	// Login route
-	err := getKey()
+	err = getKey()
 	if err != nil {
 		log.Fatal("Couldn't Load JWT RSA key" + err.Error())
 	}
@@ -34,23 +38,25 @@ func main() {
 }
 func getKey() error {
 	// Replace with your actual key file path
-	keyFilePath := "key.pem"
+	// keyFilePath := "key.pem"
+	//
+	// // Read the key file
+	// file, err := os.Open(keyFilePath)
+	// if err != nil {
+	// 	return errors.New("Error opening file:" + keyFilePath)
+	// }
+	// defer file.Close()
+	//
+	// // Read the file contents
+	// _, err = io.ReadAll(file)
+	// if err != nil {
+	// 	return errors.New("Error reading file:" + keyFilePath)
+	// }
 
-	// Read the key file
-	file, err := os.Open(keyFilePath)
-	if err != nil {
-		return errors.New("Error opening file:" + keyFilePath)
-	}
-	defer file.Close()
-
-	// Read the file contents
-	data, err := io.ReadAll(file)
-	if err != nil {
-		return errors.New("Error reading file:" + keyFilePath)
-	}
+	xs := os.Getenv("JWT_RS_SECRET")
 
 	// Decode the PEM block
-	block, _ := pem.Decode(data)
+	block, _ := pem.Decode([]byte(xs))
 	if block == nil {
 		return errors.New("Error decoding PEM block")
 	}
